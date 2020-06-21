@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/php-task-runner/sparql-robo-tasks.svg?branch=master)](https://travis-ci.com/php-task-runner/sparql-robo-tasks)
 
-This repository provides SPARQL commands for [Robo](
+This repository provides SPARQL tasks for [Robo](
 https://github.com/consolidation/Robo/).
 
 ## Tasks
@@ -12,7 +12,7 @@ $query1 = 'SELECT ?s ?p ?o WHERE { ?s ?p ?o } LIMIT 100';
 $query2 = '...';
 
 $result = $this->taskSparqlQuery()
-    ->setEndpointUrl('http://example.com/sparql-graph-crud')
+    ->setEndpointUrl('http://example.com/sparql')
     ->addQuery($query1)
     ->addQuery($query2)
     ->run();

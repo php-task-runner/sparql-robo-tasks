@@ -12,7 +12,7 @@ trait loadTasks
     /**
      * Provides a tasks loader for Sparql/Query task.
      *
-     * @return \Joinup\Tasks\Sparql\Query|\Robo\Collection\CollectionBuilder
+     * @return \Robo\Sparql\Tasks\Sparql\Query|\Robo\Collection\CollectionBuilder
      *   The task object.
      */
     public function taskSparqlQuery()
@@ -23,7 +23,7 @@ trait loadTasks
     /**
      * Provides a tasks loader for Sparql/Import task.
      *
-     * @return \Joinup\Tasks\Sparql\ImportFromString|\Robo\Collection\CollectionBuilder
+     * @return \Robo\Sparql\Tasks\Sparql\ImportFromString|\Robo\Collection\CollectionBuilder
      *   The task object.
      */
     public function taskSparqlImportFromString()
@@ -34,7 +34,7 @@ trait loadTasks
     /**
      * Provides a tasks loader for Sparql/ImportFromFile task.
      *
-     * @return \Joinup\Tasks\Sparql\ImportFromFile|\Robo\Collection\CollectionBuilder
+     * @return \Robo\Sparql\Tasks\Sparql\ImportFromFile|\Robo\Collection\CollectionBuilder
      *   The task object.
      */
     public function taskSparqlImportFromFile()

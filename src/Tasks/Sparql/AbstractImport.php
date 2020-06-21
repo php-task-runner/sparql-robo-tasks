@@ -33,13 +33,15 @@ abstract class AbstractImport extends BaseTask
         }
 
         $graphStore = new GraphStore($this->endpointUrl);
-        foreach ($this->stack as $graphUri => $stackEntry) {
+        $data = [];
+        foreach (array_keys($this->stack) as $graphUri) {
             $this->printTaskInfo("Importing triples in '{uri}' graph", ['uri' => $graphUri]);
             try {
                 $graph = new Graph($graphUri, $this->buildTriplesBlob($graphUri));
                 $graphStore->replace($graph);
             } catch (\Throwable $exception) {
-                return Result::error($this, "Triples import failed with: '{$exception->getMessage()}'");
+                $data['original_exception'] = $exception;
+                return Result::error($this, "Triples import failed with: '{$exception->getMessage()}'", $data);
             }
         }
 
@@ -75,7 +77,7 @@ abstract class AbstractImport extends BaseTask
      */
     public function addTriples(string $graphUri, $content): self
     {
-        $this->stack[$graphUri][] = $content;
+        $this->stack[$graphUri] = $content;
         return $this;
     }
 }

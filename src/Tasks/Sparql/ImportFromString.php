@@ -14,6 +14,6 @@ class ImportFromString extends AbstractImport
      */
     protected function buildTriplesBlob(string $graphUri): string
     {
-        return implode("\n", $this->stack[$graphUri]);
+        return $this->stack[$graphUri];
     }
 }

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset name="TaskRunner/Scss">
-  <description>PHP CodeSniffer configuration for the php-task-runner/scss library.</description>
+  <description>PHP CodeSniffer configuration for the php-task-runner/sparql-robo-tasks library.</description>
   <config name="installed_paths" value="../../slevomat/coding-standard"/>
   <rule ref="PSR12">
     <exclude name="Generic.Files.LineLength.TooLong" />
     <exclude name="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody" />
+    <exclude name="Squiz.Classes.ValidClassName"/>
   </rule>
   <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
     <properties>

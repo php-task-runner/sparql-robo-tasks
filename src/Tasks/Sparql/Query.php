@@ -35,13 +35,14 @@ class Query extends BaseTask
         }
 
         $client = new Client($this->endpointUrl);
-        $data = [];
+        $data = ['results' => []];
         foreach ($this->stack as $query) {
             $this->printTaskInfo("Querying SPARQL: '{query}'", ['query' => $query]);
             try {
-                $data['result'][$query] = $client->query($query);
+                $data['results'][] = $client->query($query);
             } catch (\Throwable $exception) {
-                return Result::error($this, "Query failed with: '{$exception->getMessage()}'");
+                $data['original_exception'] = $exception;
+                return Result::error($this, "Query failed with: '{$exception->getMessage()}'", $data);
             }
         }
 
