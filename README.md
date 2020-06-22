@@ -3,6 +3,13 @@
 This repository provides SPARQL tasks for [Robo](
 https://github.com/consolidation/Robo/).
 
+## Install note
+
+Until `easyrdf/easyrdf` package will get stable 1.0.0 release, the root Composer
+file will have to explicitly require `easyrdf/easyrdf`. See this issue for
+details: https://github.com/easyrdf/easyrdf/issues/320. After EasyRDF will be
+stabilised, the library will be moved back to `require` section.
+
 ## Tasks
 
 ### Query
