@@ -5,10 +5,10 @@
     "type": "robo-tasks",
     "require": {
         "php": ">=7.4",
-        "consolidation/robo": "^3.0"
+        "consolidation/robo": "^3.0",
+        "easyrdf/easyrdf": "^1.1"
     },
     "require-dev": {
-        "easyrdf/easyrdf": "^1.1",
         "phpunit/phpunit": "~7 || ~8 || ~9",
         "slevomat/coding-standard": "~6",
         "squizlabs/php_codesniffer": "~3"
