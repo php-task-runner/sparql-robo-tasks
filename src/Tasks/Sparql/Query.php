@@ -20,12 +20,12 @@ class Query extends BaseTask
      *
      * @var array
      */
-    protected $stack = [];
+    protected array $stack = [];
 
     /**
      * {@inheritdoc}
      */
-    public function run()
+    public function run(): Result
     {
         if (empty($this->endpointUrl)) {
             return Result::error($this, "Endpoint URL not set");

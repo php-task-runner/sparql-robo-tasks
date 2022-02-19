@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Robo\Sparql\Tests;
 
-use League\Container\ContainerAwareTrait;
+use EasyRdf\Sparql\Client;
 use PHPUnit\Framework\TestCase;
 use Robo\Collection\CollectionBuilder;
+use Robo\Common\BuilderAwareTrait;
+use Robo\Contract\BuilderAwareInterface;
 use Robo\Robo;
 use Robo\Sparql\Tasks\Sparql\loadTasks;
 use Robo\TaskAccessor;
-use Symfony\Component\Console\Output\NullOutput;
 
-class SparqlRoboTasksTest extends TestCase
+class SparqlRoboTasksTest extends TestCase implements BuilderAwareInterface
 {
+    use BuilderAwareTrait;
     use loadTasks;
-    use ContainerAwareTrait;
     use TaskAccessor;
 
     /**
@@ -24,19 +25,8 @@ class SparqlRoboTasksTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $container = Robo::createDefaultContainer(null, new NullOutput());
-        $this->setContainer($container);
-    }
-
-    /**
-     * Scaffold the collection builder.
-     *
-     * @return \Robo\Collection\CollectionBuilder
-     */
-    public function collectionBuilder(): CollectionBuilder
-    {
-        $emptyRobofile = new \Robo\Tasks();
-        return $this->getContainer()->get('collectionBuilder', [$emptyRobofile]);
+        $builder = CollectionBuilder::create(Robo::createContainer(), $this);
+        $this->setBuilder($builder);
     }
 
     /**
@@ -78,23 +68,21 @@ class SparqlRoboTasksTest extends TestCase
             ->addTriples('http://example.com/graph2', $triples2)
             ->run();
 
-        $result = $this->taskSparqlQuery()
-          ->setEndpointUrl($this->getSparqlEndpoint() . '/sparql')
-          ->addQuery('SELECT ?subject ?predicate ?object WHERE { GRAPH <http://example.com/graph1> { ?subject ?predicate ?object } }')
-          ->addQuery('SELECT ?subject ?predicate ?object WHERE { GRAPH <http://example.com/graph2> { ?subject ?predicate ?object } }')
-          ->addQuery('CLEAR GRAPH <http://example.com/graph1>')
-          ->addQuery('CLEAR GRAPH <http://example.com/graph2>')
-          ->run();
+        $client = new Client($this->getSparqlEndpoint() . '/sparql');
 
-        /** @var \EasyRdf\Sparql\Result[] $results */
-        $results = $result->getData()['results'];
+        $results = $client->query('SELECT ?subject ?predicate ?object WHERE { GRAPH <http://example.com/graph1> { ?subject ?predicate ?object } }');
+        $this->assertSame('http://example.com/subject1', $results[0]->subject->getUri());
+        $this->assertSame('http://example.com/predicate', $results[0]->predicate->getUri());
+        $this->assertSame('test 1', $results[0]->object->getValue());
 
-        $this->assertSame('http://example.com/subject1', $results[0][0]->subject->getUri());
-        $this->assertSame('http://example.com/predicate', $results[0][0]->predicate->getUri());
-        $this->assertSame('test 1', $results[0][0]->object->getValue());
-        $this->assertSame('http://example.com/subject2', $results[1][0]->subject->getUri());
-        $this->assertSame('http://example.com/predicate', $results[1][0]->predicate->getUri());
-        $this->assertSame('test 2', $results[1][0]->object->getValue());
+        $results = $client->query('SELECT ?subject ?predicate ?object WHERE { GRAPH <http://example.com/graph2> { ?subject ?predicate ?object } }');
+        $this->assertSame('http://example.com/subject2', $results[0]->subject->getUri());
+        $this->assertSame('http://example.com/predicate', $results[0]->predicate->getUri());
+        $this->assertSame('test 2', $results[0]->object->getValue());
+
+        // Cleanup.
+        $client->query('CLEAR GRAPH <http://example.com/graph1>');
+        $client->query('CLEAR GRAPH <http://example.com/graph2>');
     }
 
     /**

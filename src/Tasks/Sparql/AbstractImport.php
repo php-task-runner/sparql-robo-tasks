@@ -18,7 +18,7 @@ abstract class AbstractImport extends BaseTask
      *
      * @var array
      */
-    protected $stack = [];
+    protected array $stack = [];
 
     /**
      * {@inheritdoc}

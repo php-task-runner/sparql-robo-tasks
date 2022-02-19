@@ -14,7 +14,7 @@ trait SparqlTrait
      *
      * @var string
      */
-    protected $endpointUrl;
+    protected string $endpointUrl;
 
     /**
      * Sets the SPARQL endpoint.
