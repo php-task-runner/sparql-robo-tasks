@@ -6,6 +6,7 @@ namespace Robo\Sparql\Tasks\Sparql;
 
 use EasyRdf\Graph;
 use EasyRdf\GraphStore;
+use EasyRdf\Http;
 use Robo\Result;
 use Robo\Task\BaseTask;
 
@@ -31,6 +32,16 @@ abstract class AbstractImport extends BaseTask
         if (!$this->stack) {
             return Result::error($this, 'No import content was passed.');
         }
+
+        // Imports are often processing large amount of data. By default, the
+        // EasyRdf HTTP Client timeout is set to 10 seconds only. Use a wider
+        // interval to allow the import to succeed.
+        $httpClient = (new Http\Client())->setConfig([
+          'maxredirects' => 5,
+          'useragent' => 'EasyRdf HTTP Client',
+          'timeout' => 60,
+        ]);
+        Http::setDefaultHttpClient($httpClient);
 
         $graphStore = new GraphStore($this->endpointUrl);
         $data = [];
